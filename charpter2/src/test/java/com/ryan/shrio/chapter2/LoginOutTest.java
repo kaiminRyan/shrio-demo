@@ -77,6 +77,27 @@ public class LoginOutTest {
         subject.logout();
     }
 
+
+    @Test
+    public void loginJdbcRealm(){
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shrio-jdbc-realm.ini");
+        SecurityManager securityManager = factory.getInstance();
+        SecurityUtils.setSecurityManager(securityManager);
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken ryan = new UsernamePasswordToken("ryan", "123");
+        try {
+            //4、登录，即身份验证
+            subject.login(ryan);
+        } catch (AuthenticationException e) {
+            //5、身份验证失败
+        }
+
+        Assert.assertEquals(true, subject.isAuthenticated()); //断言用户已经登录
+
+        //6、退出
+        subject.logout();
+    }
+
     @Test
     public void loginTest1(){
         System.out.printf("ssss");
